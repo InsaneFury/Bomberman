@@ -18,7 +18,8 @@ public class Bomb : MonoBehaviour
     void Start ()
     {
         player = Player.Get();
-        Invoke ("Explode", 3f); //Call Explode in 3 seconds
+        explosionSize = player.sizeOfExplosion;
+        Invoke ("Explode", player.timeToExplode); //Call Explode in 3 seconds
     }
 
     void Explode ()

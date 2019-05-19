@@ -11,12 +11,12 @@ public class Enemy : MonoBehaviour
     public float snapSpeed = 2f;
     public float gridSize;
     public LayerMask layerMask;
-    public float rayDistance = 5f;
-
+    public Directions startDirection;
+    bool onCollision = false;
     Rigidbody rigidBody;
     Transform myTransform;
 
-    enum Directions
+    public enum Directions
     {
         Up,
         Down,
@@ -27,17 +27,14 @@ public class Enemy : MonoBehaviour
 
     void Start()
     {
-        direction = (Directions)Mathf.RoundToInt(Random.Range(0f, 3f));
+        direction = startDirection;
         rigidBody = GetComponent<Rigidbody>();
         myTransform = transform;
     }
 
     void FixedUpdate()
     {
-        if (CheckIfIsEmpty())
-        {
-            Move();
-        } 
+        Move();
     }
 
     public void OnTriggerEnter(Collider other)
@@ -51,10 +48,27 @@ public class Enemy : MonoBehaviour
         }
     }
 
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (!onCollision)
+        {
+            ChangeDirection();
+            onCollision = true;
+        }
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        if (onCollision)
+        {
+            onCollision = false;
+        }
+    }
+
     void Move()
     {
         if (!canMove)
-        { 
+        {
             return;
         }
 
@@ -65,65 +79,52 @@ public class Enemy : MonoBehaviour
                 myTransform.rotation = Quaternion.Euler(0, 0, 0);
                 break;
             case Directions.Down:
-                rigidBody.velocity = new Vector3(-moveSpeed, rigidBody.velocity.y, rigidBody.velocity.z);
-                myTransform.rotation = Quaternion.Euler(0, 270, 0);
+                rigidBody.velocity = new Vector3(rigidBody.velocity.x, rigidBody.velocity.y, -moveSpeed);
+                myTransform.rotation = Quaternion.Euler(0, 180, 0);
                 break;
             case Directions.Right:
                 rigidBody.velocity = new Vector3(moveSpeed, rigidBody.velocity.y, rigidBody.velocity.z);
                 myTransform.rotation = Quaternion.Euler(0, 90, 0);
                 break;
             case Directions.Left:
-                rigidBody.velocity = new Vector3(rigidBody.velocity.x, rigidBody.velocity.y, -moveSpeed);
-                myTransform.rotation = Quaternion.Euler(0, 180, 0);
+                rigidBody.velocity = new Vector3(-moveSpeed, rigidBody.velocity.y, rigidBody.velocity.z);
+                myTransform.rotation = Quaternion.Euler(0, 270, 0);
+
                 break;
         }
-       // SnapPlayer();
+        //SnapPlayer();
+    }
+
+    void ChangeDirection()
+    {
+        if (direction == Directions.Up)
+        {
+            direction = Directions.Down;
+
+        }
+        else if (direction == Directions.Down)
+        {
+            direction = Directions.Up;
+        }
+        else if(direction == Directions.Right)
+        {
+            direction = Directions.Left;
+        }
+        else if(direction == Directions.Left)
+        {
+            direction = Directions.Right;
+        }
     }
 
     void SnapPlayer()
     {
         //Snaping player to grid
         Vector3 roundPos = new Vector3(
-            Mathf.Floor(myTransform.localPosition.x),
-            Mathf.Floor(myTransform.localPosition.y),
-            Mathf.Floor(myTransform.localPosition.z));
+            Mathf.RoundToInt(myTransform.localPosition.x),
+            myTransform.localPosition.y,
+            Mathf.RoundToInt(myTransform.localPosition.z));
 
         Vector3 roundedFinalPos = Vector3.Lerp(myTransform.localPosition, roundPos, snapSpeed * Time.deltaTime);
         myTransform.localPosition = roundedFinalPos;
     }
-
-   bool CheckIfIsEmpty()
-   {
-        RaycastHit hit;
-
-        if (Physics.Raycast(myTransform.localPosition, myTransform.forward, out hit, rayDistance, layerMask))
-        {
-            rigidBody.isKinematic = true;
-            rigidBody.isKinematic = false;
-            Debug.DrawRay(transform.localPosition, myTransform.forward * hit.distance, Color.yellow);
-            if (direction == Directions.Up)
-            {
-                direction = Directions.Down;
-            }
-            else if (direction == Directions.Down)
-            {
-                direction = Directions.Up;
-            }
-            else if (direction == Directions.Right)
-            {
-                direction = Directions.Left;
-            }
-            else if (direction == Directions.Left)
-            {
-                direction = Directions.Right;
-            }
-            Debug.Log(direction);
-            return false;
-        }
-        else
-        {
-            Debug.DrawRay(transform.localPosition, myTransform.forward * hit.distance, Color.white);
-            return true;
-        }
-   }
 }

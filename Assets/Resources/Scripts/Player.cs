@@ -16,6 +16,8 @@ public class Player : SingletonMonobehaviour<Player>
     [Header("PlayerBombsSettings")]
     public bool canDropBombs = true;
     public int maxBombsAtSameTime = 1;
+    public int sizeOfExplosion = 1;
+    public float timeToExplode = 3f;
     [HideInInspector]
     public int currentBombs = 1;
 
@@ -127,9 +129,9 @@ public class Player : SingletonMonobehaviour<Player>
     {
         //Snaping player to grid
         Vector3 roundPos = new Vector3(
-            Mathf.Floor(myTransform.localPosition.x * 100) / 100,
-            Mathf.Floor(myTransform.localPosition.y * 100) / 100,
-            Mathf.Floor(myTransform.localPosition.z * 100) / 100);
+        Mathf.Floor(myTransform.localPosition.x*100)/100,
+        myTransform.localPosition.y,
+        Mathf.Floor(myTransform.localPosition.z*100)/100);
 
         Vector3 roundedFinalPos =  Vector3.Lerp(myTransform.localPosition, roundPos,snapSpeed * Time.deltaTime);
         myTransform.localPosition = roundedFinalPos;

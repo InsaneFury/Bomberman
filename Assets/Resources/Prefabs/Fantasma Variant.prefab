@@ -16,20 +16,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 116
   m_CollisionDetection: 0
---- !u!136 &1045380055
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8906931541603015207}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.66
-  m_Height: 1.8075624
-  m_Direction: 1
-  m_Center: {x: 0, y: 0.6118581, z: 0}
 --- !u!1001 &8906931541603114235
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -39,19 +25,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 100060, guid: 968de02229b7a7045ab69a216a9b8f07, type: 3}
       propertyPath: m_Name
-      value: Fantasma
-      objectReference: {fileID: 0}
-    - target: {fileID: 400006, guid: 968de02229b7a7045ab69a216a9b8f07, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -0.00017
-      objectReference: {fileID: 0}
-    - target: {fileID: 400006, guid: 968de02229b7a7045ab69a216a9b8f07, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.00433
-      objectReference: {fileID: 0}
-    - target: {fileID: 400006, guid: 968de02229b7a7045ab69a216a9b8f07, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
+      value: Fantasma Variant
       objectReference: {fileID: 0}
     - target: {fileID: 400060, guid: 968de02229b7a7045ab69a216a9b8f07, type: 3}
       propertyPath: m_LocalPosition.x
@@ -109,10 +83,6 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.5
       objectReference: {fileID: 0}
-    - target: {fileID: 9500000, guid: 968de02229b7a7045ab69a216a9b8f07, type: 3}
-      propertyPath: m_Controller
-      value: 
-      objectReference: {fileID: 9100000, guid: ce8fe51dac421264e8eee20ae02e59b7, type: 2}
     - target: {fileID: 13700000, guid: 968de02229b7a7045ab69a216a9b8f07, type: 3}
       propertyPath: m_Bones.Array.data[0]
       value: 
@@ -197,6 +167,22 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: -0.00204
       objectReference: {fileID: 0}
+    - target: {fileID: 400006, guid: 968de02229b7a7045ab69a216a9b8f07, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.00017
+      objectReference: {fileID: 0}
+    - target: {fileID: 400006, guid: 968de02229b7a7045ab69a216a9b8f07, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.00433
+      objectReference: {fileID: 0}
+    - target: {fileID: 400006, guid: 968de02229b7a7045ab69a216a9b8f07, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9500000, guid: 968de02229b7a7045ab69a216a9b8f07, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: ce8fe51dac421264e8eee20ae02e59b7, type: 2}
     m_RemovedComponents:
     - {fileID: 9500000, guid: 968de02229b7a7045ab69a216a9b8f07, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 968de02229b7a7045ab69a216a9b8f07, type: 3}
