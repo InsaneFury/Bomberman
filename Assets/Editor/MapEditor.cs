@@ -154,6 +154,7 @@ public class MapEditor : Editor
         }
 
         scriptActive = true;
+        DeleteInnerWalls();
 
         int dist = 2;
 
@@ -196,6 +197,7 @@ public class MapEditor : Editor
         }
 
         scriptActive = true;
+        DeleteDestructableWalls();
 
         //Ints para evitar spawnear dentro de las paredes exteriores
         int startDist = 1;
@@ -251,8 +253,8 @@ public class MapEditor : Editor
         //Re posicionando
         creator.floor.transform.position = new Vector3(creator.gridSizeX / 2, 0, creator.gridSizeZ / 2);
         //Ajustando material para que se vea correctamente
-        creator.floor.transform.GetComponent<MeshRenderer>().sharedMaterial.mainTextureScale =
-            new Vector2(creator.gridSizeX, creator.gridSizeZ);
+        /*creator.floor.transform.GetComponent<MeshRenderer>().sharedMaterial.mainTextureScale =
+            new Vector2(creator.gridSizeX, creator.gridSizeZ);*/
     }
 
     //Chekeamos si podemos construir
