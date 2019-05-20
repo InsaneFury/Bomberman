@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
+    public delegate void OnEnemyAction(Enemy e);
+    public static OnEnemyAction OnEnemyDie;
+
     [Header("EnemySettings")]
     public float moveSpeed = 5f;
     public bool canMove = true;
@@ -12,6 +15,8 @@ public class Enemy : MonoBehaviour
     public float gridSize;
     public LayerMask layerMask;
     public Directions startDirection;
+
+    public int score = 500;
     bool onCollision = false;
     Rigidbody rigidBody;
     Transform myTransform;
@@ -30,6 +35,7 @@ public class Enemy : MonoBehaviour
         direction = startDirection;
         rigidBody = GetComponent<Rigidbody>();
         myTransform = transform;
+        OnEnemyDie += DisableEnemy;
     }
 
     void FixedUpdate()
@@ -44,7 +50,7 @@ public class Enemy : MonoBehaviour
             Debug.Log("Enemy hit by explosion!");
 
             dead = true;
-            Destroy(gameObject);
+            Die();
         }
     }
 
@@ -114,6 +120,19 @@ public class Enemy : MonoBehaviour
         {
             direction = Directions.Right;
         }
+    }
+
+    void Die()
+    {
+        if (OnEnemyDie != null)
+        {
+            OnEnemyDie(this);
+        }
+    }
+
+    void DisableEnemy(Enemy e)
+    {
+        e.gameObject.SetActive(false);
     }
 
     void SnapPlayer()

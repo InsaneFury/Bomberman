@@ -4,15 +4,17 @@ using System;
 
 public class Player : SingletonMonobehaviour<Player>
 {
-    //Manager
-    //public GlobalStateManager globalManager;
+    public delegate void OnPlayerAction(Player player);
+    public OnPlayerAction OnPlayerDie;
 
     [Header("PlayerSettings")]
+    public int startLives = 2;
     public float moveSpeed = 5f;
     public bool canMove = true;
     public bool dead = false;
     public float snapSpeed = 2f;
     public float gridSize;
+
     [Header("PlayerBombsSettings")]
     public bool canDropBombs = true;
     public int maxBombsAtSameTime = 1;
@@ -23,6 +25,8 @@ public class Player : SingletonMonobehaviour<Player>
 
     public GameObject bombPrefab;
 
+    [HideInInspector]
+    public int lives;
     Rigidbody rigidBody;
     Transform myTransform;
     Animator animator;
@@ -36,10 +40,12 @@ public class Player : SingletonMonobehaviour<Player>
 
     void Start()
     {
+        lives = startLives;
         currentBombs = maxBombsAtSameTime;
         rigidBody = GetComponent<Rigidbody>();
         myTransform = transform;
         animator = GetComponent<Animator>();
+        OnPlayerDie += Die;
     }
 
     void FixedUpdate()
@@ -55,13 +61,13 @@ public class Player : SingletonMonobehaviour<Player>
         { //Return if player can't move
             return;
         }
-        UpdatePlayer1Movement();  
+        PlayerInputs();  
     }
 
     /// <summary>
-    /// Updates Player 1's movement and facing rotation using the WASD keys and drops bombs using Space
+    /// Player's movement and facing rotation using the WASD keys and drops bombs using Space
     /// </summary>
-    private void UpdatePlayer1Movement()
+    private void PlayerInputs()
     {
         if (Input.GetKey(KeyCode.W))
         { //Up movement
@@ -119,10 +125,49 @@ public class Player : SingletonMonobehaviour<Player>
         if (!dead && other.CompareTag("Explosion"))
         {
             Debug.Log("Player hit by explosion!");
-
             dead = true;
-            Destroy(gameObject);
+            playerDie();
         }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (!dead && collision.collider.CompareTag("Enemy"))
+        {
+            Debug.Log("Player hit by Enemy!");
+            dead = true;
+            playerDie();
+        }
+    }
+
+    void Die(Player player)
+    {
+        lives--;
+    }
+
+    public void Revive()
+    {
+        dead = false;
+    }
+
+    void playerDie()
+    {
+        if (OnPlayerDie != null)
+        {
+            OnPlayerDie(this);
+        }
+    }
+
+    public void StopPlayer()
+    {
+        canMove = false;
+        canDropBombs = false;
+    }
+
+    public void ResetPlayer()
+    {
+        canMove = true;
+        canDropBombs = true;
     }
 
     void SnapPlayer()

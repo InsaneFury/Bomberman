@@ -11,11 +11,15 @@ public class MapEditor : Editor
     GameObject wallPrefab;
     GameObject innerWallPrefab;
     GameObject destructableWallPrefab;
+    GameObject portalPrefab;
 
     MapCreator creator;
     int minGridSize = 5;
     bool scriptActive = false;
+    bool portalSpawned = false;
     float randomPercent;
+    int portalSet = 5;
+    int portalCounter = 0;
 
     //Sobrescribiendo la funcion OnInspectorGUI para poder customizar el inspector de nuestro script
     public override void OnInspectorGUI()
@@ -28,6 +32,7 @@ public class MapEditor : Editor
         wallPrefab = creator.wall;
         innerWallPrefab = creator.innerWall;
         destructableWallPrefab = creator.destructableWall;
+        portalPrefab = creator.portal;
         randomPercent = creator.percent;
 
         //Esta funcion nos permite agregar multiples buttons al inspector y mantenerlos de manera horizontal
@@ -46,7 +51,7 @@ public class MapEditor : Editor
             {
                 DeleteBorder();
             }
-        } 
+        }
         EditorGUILayout.EndHorizontal();
         //Inner walls GUI
         EditorGUILayout.BeginHorizontal();
@@ -139,7 +144,7 @@ public class MapEditor : Editor
         //Contamos los childs y usamos childs - 1 porque arranca en 0
         int childCount = creator.outerWallHolder.childCount;
         //Recoremos con un for y destruimos con immediate que nos permite destruir fuera de play
-        for (int i = childCount-1; i >= 0; i--)
+        for (int i = childCount - 1; i >= 0; i--)
         {
             DestroyImmediate(creator.outerWallHolder.transform.GetChild(i).gameObject);
         }
@@ -158,9 +163,9 @@ public class MapEditor : Editor
 
         int dist = 2;
 
-        for (int i = dist; i <= creator.gridSizeX-dist; i++)
+        for (int i = dist; i <= creator.gridSizeX - dist; i++)
         {
-            for (int j = dist; j <= creator.gridSizeZ-dist; j++)
+            for (int j = dist; j <= creator.gridSizeZ - dist; j++)
             {
                 if ((i % dist) == 0 && (j % dist) == 0)
                 {
@@ -202,6 +207,7 @@ public class MapEditor : Editor
         //Ints para evitar spawnear dentro de las paredes exteriores
         int startDist = 1;
         int endDist = 2;
+        float groundPosY = 0.031f;
 
         //int para calcular donde se spawnearon walls internas
         int innerWallPos = 2;
@@ -218,16 +224,28 @@ public class MapEditor : Editor
                 {
                     if ((Random.Range(0f, 1f)) <= randomPercent)
                     {
+                        portalCounter++;
                         GameObject wall = PrefabUtility.InstantiatePrefab(destructableWallPrefab) as GameObject;
                         wall.transform.position = new Vector3(creator.start.x + i + creator.offset.x,
                             creator.start.y + creator.offset.y,
                             creator.start.z + j + creator.offset.z
                             );
                         wall.transform.parent = creator.destructablesHolder;
-                    }    
+                        if (!portalSpawned && (portalCounter == portalSet))
+                        {
+                            GameObject portal = PrefabUtility.InstantiatePrefab(portalPrefab) as GameObject;
+                            portal.transform.position = new Vector3(wall.transform.position.x,
+                               groundPosY, 
+                               wall.transform.position.z);
+                            portal.transform.parent = creator.destructablesHolder;
+                            portalSpawned = true;
+                        }
+                    }
                 }
             }
         }
+        portalCounter = 0;
+        portalSpawned = false;
         scriptActive = false;
     }
 

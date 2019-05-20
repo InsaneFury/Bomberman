@@ -11,6 +11,7 @@ public class MapCreator : MonoBehaviour
     public GameObject innerWall;
     public GameObject destructableWall;
     public GameObject floor;
+    public GameObject portal;
     [Header("PlaceHolder")]
     public Transform outerWallHolder;
     public Transform innerWallHolder;

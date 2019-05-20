@@ -27,6 +27,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Fantasma Variant
       objectReference: {fileID: 0}
+    - target: {fileID: 100060, guid: 968de02229b7a7045ab69a216a9b8f07, type: 3}
+      propertyPath: m_TagString
+      value: Enemy
+      objectReference: {fileID: 0}
     - target: {fileID: 400060, guid: 968de02229b7a7045ab69a216a9b8f07, type: 3}
       propertyPath: m_LocalPosition.x
       value: 3.021
