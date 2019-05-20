@@ -7,6 +7,7 @@ using TMPro;
 public class UIGameplayManager : SingletonMonobehaviour<UIGameplayManager>
 {
     public GameObject[] lives;
+    public GameObject portalText;
     public TextMeshProUGUI scoreText;
     public TextMeshProUGUI highScoreText;
     public TextMeshProUGUI bombsText;
@@ -57,6 +58,14 @@ public class UIGameplayManager : SingletonMonobehaviour<UIGameplayManager>
         if (!gManager.gameOver)
         {
             timeText.text = gManager.time;
+        }
+        if (eManager.EnemysActiveInGame == 0)
+        {
+            portalText.SetActive(true);
+        }
+        else
+        {
+            portalText.SetActive(false);
         }
     }
 

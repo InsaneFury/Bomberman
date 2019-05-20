@@ -20,12 +20,15 @@ public class EnemyManager : SingletonMonobehaviour<EnemyManager>
         if (amountOfEnemysInGame > enemys.Count)
         {
             amountOfEnemysInGame = enemys.Count;
+            EnemysActiveInGame = amountOfEnemysInGame;
         }
         else if (amountOfEnemysInGame < 0)
         {
             amountOfEnemysInGame = 1;
+            EnemysActiveInGame = amountOfEnemysInGame;
         }
         EnemysActiveInGame = amountOfEnemysInGame;
+
         for (int i = 0; i < amountOfEnemysInGame; i++)
         {
             enemys[i].gameObject.SetActive(true);
