@@ -1,11 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using System;
 
 public class Player : SingletonMonobehaviour<Player>
 {
     public delegate void OnPlayerAction(Player player);
     public OnPlayerAction OnPlayerDie;
+    public OnPlayerAction OnPlayerDropBomb;
 
     [Header("PlayerSettings")]
     public int startLives = 2;
@@ -20,7 +22,6 @@ public class Player : SingletonMonobehaviour<Player>
     public int maxBombsAtSameTime = 1;
     public int sizeOfExplosion = 1;
     public float timeToExplode = 3f;
-    [HideInInspector]
     public int currentBombs = 1;
 
     public GameObject bombPrefab;
@@ -46,6 +47,7 @@ public class Player : SingletonMonobehaviour<Player>
         myTransform = transform;
         animator = GetComponent<Animator>();
         OnPlayerDie += Die;
+        OnPlayerDropBomb += DropBomb;
     }
 
     void FixedUpdate()
@@ -102,20 +104,30 @@ public class Player : SingletonMonobehaviour<Player>
             if (canDropBombs && Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0))
             {
                 currentBombs--;
-                DropBomb();
+                PlayerDropBomb();
             }
         }
 
         SnapPlayer();
     }
 
-    private void DropBomb()
+    void PlayerDropBomb()
+    {
+        if(OnPlayerDropBomb != null){
+            OnPlayerDropBomb(this);
+        }
+    }
+
+
+    private void DropBomb(Player p)
     {
         if (bombPrefab)
         { //Check if bomb prefab is assigned first
             // Create new bomb and snap it to a tile
-            Instantiate(bombPrefab,
-                new Vector3(Mathf.RoundToInt(myTransform.position.x), bombPrefab.transform.position.y, Mathf.RoundToInt(myTransform.position.z)),
+           Instantiate(bombPrefab,
+                new Vector3(Mathf.RoundToInt(myTransform.position.x), 
+                bombPrefab.transform.position.y, 
+                Mathf.RoundToInt(myTransform.position.z)),
                 bombPrefab.transform.rotation);
         }
     }

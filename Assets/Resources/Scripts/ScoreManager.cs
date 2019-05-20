@@ -6,8 +6,7 @@ public class ScoreManager : SingletonMonobehaviour<ScoreManager>
 {
     [Header("ScoreSettings")]
     public int score = 0;
-    [SerializeField]
-    int highScore = 0;
+    public int highScore = 0;
 
     public override void Awake()
     {
@@ -19,21 +18,19 @@ public class ScoreManager : SingletonMonobehaviour<ScoreManager>
         Enemy.OnEnemyDie += AddScoreFromEnemy;
         DestructibleObject.OnObjectDestroy += AddScoreFromBrickWall;
         highScore = PlayerPrefs.GetInt("HighScore");
-    }
-
-    private void Update()
-    {
-        
+        UIGameplayManager.Get().RefreshScoreUI();
     }
 
     void AddScoreFromEnemy(Enemy e)
     {
         score += e.score;
+        UIGameplayManager.Get().RefreshScoreUI();
     }
 
     void AddScoreFromBrickWall(DestructibleObject d)
     {
         score += d.score;
+        UIGameplayManager.Get().RefreshScoreUI();
     }
 
     public void AddHighScore()
@@ -42,6 +39,13 @@ public class ScoreManager : SingletonMonobehaviour<ScoreManager>
         {
             highScore = score;
             PlayerPrefs.SetInt("HighScore", highScore);
+            UIGameplayManager.Get().RefreshScoreUI();
         }   
+    }
+
+    public void ResetHighScore()
+    {
+        PlayerPrefs.SetInt("HighScore", 0);
+        UIGameplayManager.Get().RefreshScoreUI();
     }
 }

@@ -11,15 +11,34 @@ public class Bomb : MonoBehaviour
     public LayerMask levelMask;
     public int explosionSize = 1;
 
+    public delegate void OnBombAction(Bomb b);
+    public OnBombAction OnBombExplode;
+
     Player player;
+    UIGameplayManager UIManager;
 
     bool exploded = false;
 
     void Start ()
     {
         player = Player.Get();
+        UIManager = UIGameplayManager.Get();
         explosionSize = player.sizeOfExplosion;
-        Invoke ("Explode", player.timeToExplode); //Call Explode in 3 seconds
+        OnBombExplode += CallExplode;
+        BombExplode();
+    }
+
+    void BombExplode()
+    {
+        if (OnBombExplode != null)
+        {
+            OnBombExplode(this);
+        }
+    }
+
+    void CallExplode(Bomb b)
+    {
+        Invoke("Explode", player.timeToExplode); //Call Explode in 3 seconds
     }
 
     void Explode ()
@@ -39,7 +58,8 @@ public class Bomb : MonoBehaviour
         GetComponent<MeshRenderer> ().enabled = false; //Disable mesh
         exploded = true;
         player.currentBombs++;
-        transform.Find ("Collider").gameObject.SetActive (false); //Disable the collider
+        UIManager.RefreshBombUI(player);
+        transform.Find("Collider").gameObject.SetActive(false); //Disable the collider
         Destroy (gameObject, .3f); //Destroy the actual bomb in 0.3 seconds, after all coroutines have finished
     }
 

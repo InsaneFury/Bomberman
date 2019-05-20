@@ -2,19 +2,38 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
-public class UIGameplayManager : MonoBehaviour
+public class UIGameplayManager : SingletonMonobehaviour<UIGameplayManager>
 {
     public GameObject[] lives;
+    public TextMeshProUGUI scoreText;
+    public TextMeshProUGUI highScoreText;
+    public TextMeshProUGUI bombsText;
+    public TextMeshProUGUI explosionDistText;
+
     Player player;
+    ScoreManager sManager;
+
+    public override void Awake()
+    {
+        base.Awake();
+    }
 
     void Start()
     {
         player = Player.Get();
+        sManager = ScoreManager.Get();
+        scoreText.text = sManager.score.ToString();
+        highScoreText.text = sManager.highScore.ToString();
+        bombsText.text = player.currentBombs.ToString();
+        explosionDistText.text = player.sizeOfExplosion.ToString();
+        
         for (int i = 0; i < player.startLives; i++)
         {
             lives[i].GetComponent<Life>().LifeEnabled = true;
         }
+        player.OnPlayerDropBomb += RefreshBombUI;
     }
 
     void Update()
@@ -36,4 +55,21 @@ public class UIGameplayManager : MonoBehaviour
             lives[i].GetComponent<Life>().LifeEnabled = true;
         }
     }
+
+    public void RefreshScoreUI()
+    {
+        scoreText.text = sManager.score.ToString();
+        highScoreText.text = sManager.highScore.ToString();
+    }
+
+    public void RefreshBombUI(Player p)
+    {
+        bombsText.text = p.currentBombs.ToString();
+    }
+
+    public void RefreshBombUI(Bomb b)
+    {
+        RefreshBombUI(player);
+    }
+
 }

@@ -32,7 +32,7 @@ public class Portal : SingletonMonobehaviour<Portal>
         }
     }
 
-    private void OnTriggerEnter(Collider other)
+    public void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player") && portalIsActive)
         {
