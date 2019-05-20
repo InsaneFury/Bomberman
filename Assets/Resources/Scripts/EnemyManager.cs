@@ -6,10 +6,17 @@ public class EnemyManager : SingletonMonobehaviour<EnemyManager>
 {
     public List<GameObject> enemys;
     public int amountOfEnemysInGame = 7;
-    public int EnemysActiveInGame = 0;
+    public int EnemysActiveInGame;
+    UIGameplayManager UIManager;
+
+    public override void Awake()
+    {
+        base.Awake();
+    }
 
     void Start()
     {
+        UIManager = UIGameplayManager.Get();
         if (amountOfEnemysInGame > enemys.Count)
         {
             amountOfEnemysInGame = enemys.Count;
@@ -23,11 +30,13 @@ public class EnemyManager : SingletonMonobehaviour<EnemyManager>
         {
             enemys[i].gameObject.SetActive(true);
         }
+        UIManager.RefreshCountOfEnemysUI();
         Enemy.OnEnemyDie += RemoveEnemyFromList;
     }
 
     void RemoveEnemyFromList(Enemy e)
     {
         EnemysActiveInGame--;
+        UIManager.RefreshCountOfEnemysUI();
     }
 }

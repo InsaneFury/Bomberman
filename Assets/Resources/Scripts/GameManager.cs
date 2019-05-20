@@ -10,6 +10,9 @@ public class GameManager : SingletonMonobehaviour<GameManager>
     Player player;
     Portal portal;
     ScoreManager sManager;
+    float gameTimer = 0f;
+    public bool gameOver = false;
+    public string time = " ";
 
     public override void Awake()
     {
@@ -34,6 +37,10 @@ public class GameManager : SingletonMonobehaviour<GameManager>
         {
             Victory();
         }
+        if (!gameOver)
+        {
+            time = GetRealTime();
+        }
     }
 
     void ResetPlayer(Player player)
@@ -45,6 +52,7 @@ public class GameManager : SingletonMonobehaviour<GameManager>
     void GameOver()
     {
         player.StopPlayer();
+        gameOver = true;
         Debug.Log("GameOver");
     }
 
@@ -52,7 +60,19 @@ public class GameManager : SingletonMonobehaviour<GameManager>
     {
         player.StopPlayer();
         sManager.AddHighScore();
+        gameOver = true;
         Debug.Log("Victory");
     }
 
+    public string GetRealTime()
+    {
+        gameTimer += Time.deltaTime;
+
+        int seconds = (int)(gameTimer % 60);
+        int minutes = (int)(gameTimer / 60) % 60;
+
+        string timerString = string.Format("{0:00}:{1:00}", minutes, seconds);
+
+        return timerString;
+    } 
 }

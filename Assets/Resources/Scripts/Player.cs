@@ -118,7 +118,6 @@ public class Player : SingletonMonobehaviour<Player>
         }
     }
 
-
     private void DropBomb(Player p)
     {
         if (bombPrefab)
