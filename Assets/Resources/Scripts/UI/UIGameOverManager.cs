@@ -47,6 +47,7 @@ public class UIGameOverManager : SingletonMonobehaviour<UIGameplayManager>
 
     public void Retry()
     {
+        gManager.Retry();
         scenes.ReloadScene();
     }
 

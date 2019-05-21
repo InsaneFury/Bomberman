@@ -29,4 +29,9 @@ public class ScenesManager : SingletonMonobehaviour<ScenesManager>
     public void ExitGame() {
         Application.Quit();
     }
+
+    public string GetActualScene()
+    {
+        return SceneManager.GetActiveScene().name;
+    }
 }

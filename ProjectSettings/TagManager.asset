@@ -8,6 +8,7 @@ TagManager:
   - DestructibleWall
   - Wall
   - Enemy
+  - SpawnPoint
   layers:
   - Default
   - TransparentFX

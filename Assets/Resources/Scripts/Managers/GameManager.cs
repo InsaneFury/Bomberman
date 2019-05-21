@@ -6,7 +6,7 @@ public class GameManager : SingletonMonobehaviour<GameManager>
 {
     [Header("Settings")]
     [Tooltip("Player Spawn Point")]
-    public Transform spawnPoint;
+    public GameObject spawnPoint;
     Player player;
     Portal portal;
     ScoreManager sManager;
@@ -23,10 +23,7 @@ public class GameManager : SingletonMonobehaviour<GameManager>
 
     void Start()
     {
-        player = Player.Get();
-        player.OnPlayerDie += ResetPlayer;
-        portal = Portal.Get();
-        sManager = ScoreManager.Get();
+        Init();
     }
 
     void Update()
@@ -43,13 +40,17 @@ public class GameManager : SingletonMonobehaviour<GameManager>
         {
             time = GetRealTime();
         }
+        if (!spawnPoint)
+        {
+            Init();
+        }
     }
 
     void ResetPlayer(Player player)
     {
         if (spawnPoint)
         {
-            player.transform.position = spawnPoint.position;
+            player.transform.position = spawnPoint.transform.position;
         }
         player.Revive();
     }
@@ -81,5 +82,21 @@ public class GameManager : SingletonMonobehaviour<GameManager>
         string timerString = string.Format("{0:00}:{1:00}", minutes, seconds);
 
         return timerString;
-    } 
+    }
+    public void Retry()
+    {
+        gameOver = false;
+        sManager.ResetScore();
+        player.dead = false;
+        gameTimer = 0f;
+    }
+
+    void Init()
+    {
+        player = Player.Get();
+        player.OnPlayerDie += ResetPlayer;
+        portal = Portal.Get();
+        sManager = ScoreManager.Get();
+        spawnPoint = GameObject.FindGameObjectWithTag("SpawnPoint");
+    }
 }

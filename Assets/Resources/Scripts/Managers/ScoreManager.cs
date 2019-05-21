@@ -49,4 +49,9 @@ public class ScoreManager : SingletonMonobehaviour<ScoreManager>
         PlayerPrefs.SetInt("HighScore", 0);
         UIGameplayManager.Get().RefreshScoreUI();
     }
+
+    public void ResetScore()
+    {
+        score = 0;
+    }
 }

@@ -15,6 +15,7 @@ public class Player : SingletonMonobehaviour<Player>
     public bool canMove = true;
     public bool dead = false;
     public float snapSpeed = 2f;
+    public float snapTime = 2f;
     public float gridSize;
 
     [Header("PlayerBombsSettings")]
@@ -77,22 +78,19 @@ public class Player : SingletonMonobehaviour<Player>
             myTransform.rotation = Quaternion.Euler(0, 0, 0);
             animator.SetBool("Run", true);
         }
-
-        if (Input.GetKey(KeyCode.A))
-        { //Left movement
-            rigidBody.velocity = new Vector3(-moveSpeed, rigidBody.velocity.y, rigidBody.velocity.z);
-            myTransform.rotation = Quaternion.Euler(0, 270, 0);
-            animator.SetBool("Run", true);
-        }
-
-        if (Input.GetKey(KeyCode.S))
+        else if (Input.GetKey(KeyCode.S))
         { //Down movement
             rigidBody.velocity = new Vector3(rigidBody.velocity.x, rigidBody.velocity.y, -moveSpeed);
             myTransform.rotation = Quaternion.Euler(0, 180, 0);
             animator.SetBool("Run", true);
         }
-
-        if (Input.GetKey(KeyCode.D))
+        else if (Input.GetKey(KeyCode.A))
+        { //Left movement
+            rigidBody.velocity = new Vector3(-moveSpeed, rigidBody.velocity.y, rigidBody.velocity.z);
+            myTransform.rotation = Quaternion.Euler(0, 270, 0);
+            animator.SetBool("Run", true);
+        }
+        else if (Input.GetKey(KeyCode.D))
         { //Right movement
             rigidBody.velocity = new Vector3(moveSpeed, rigidBody.velocity.y, rigidBody.velocity.z);
             myTransform.rotation = Quaternion.Euler(0, 90, 0);
@@ -107,8 +105,6 @@ public class Player : SingletonMonobehaviour<Player>
                 PlayerDropBomb();
             }
         }
-
-        SnapPlayer();
     }
 
     void PlayerDropBomb()
@@ -185,10 +181,9 @@ public class Player : SingletonMonobehaviour<Player>
     {
         //Snaping player to grid
         Vector3 roundPos = new Vector3(
-        Mathf.Floor(myTransform.localPosition.x*100)/100,
+        Mathf.RoundToInt(myTransform.localPosition.x),
         myTransform.localPosition.y,
-        Mathf.Floor(myTransform.localPosition.z*100)/100);
-
+        Mathf.RoundToInt(myTransform.localPosition.z));
         Vector3 roundedFinalPos =  Vector3.Lerp(myTransform.localPosition, roundPos,snapSpeed * Time.deltaTime);
         myTransform.localPosition = roundedFinalPos;
     }
