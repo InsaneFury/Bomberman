@@ -32,6 +32,7 @@ public class Enemy : MonoBehaviour
 
     void Start()
     {
+        canMove = true;
         direction = startDirection;
         rigidBody = GetComponent<Rigidbody>();
         myTransform = transform;

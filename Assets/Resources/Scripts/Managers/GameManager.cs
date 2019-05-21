@@ -32,7 +32,7 @@ public class GameManager : SingletonMonobehaviour<GameManager>
         {
             GameOver();
         }
-        else if (player.lives > 0 && player.canMove && portal.playerIsOnPortal)
+        else if ((player.lives > 0 && player.canMove) && portal.playerIsOnPortal)
         {
             Victory();
         }

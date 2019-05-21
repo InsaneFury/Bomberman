@@ -60,7 +60,7 @@ public class Bomb : MonoBehaviour
         player.currentBombs++;
         UIManager.RefreshBombUI(player);
         transform.Find("Collider").gameObject.SetActive(false); //Disable the collider
-        Destroy (gameObject, .3f); //Destroy the actual bomb in 0.3 seconds, after all coroutines have finished
+        Destroy (gameObject); //Destroy the actual bomb in 0.3 seconds, after all coroutines have finished
     }
 
     public void OnTriggerEnter (Collider other)
